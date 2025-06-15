@@ -74,6 +74,12 @@ while [[ $# -gt 0 ]]; do
               *.bedgraph.gz)  bedgraph_files+=("$1") ;;
               *)              echo "Unknown extension" ; exit 1 ;;
             esac
+
+            if ! [[ -s "$1" &&  -r "$1" ]] ; then
+              echo "Error: input file $1 does not exist or is unreadable"
+              exit 1
+            fi
+
             shift
             ;;
     esac
@@ -107,13 +113,14 @@ if ! [ -n "$out_sample" ] ; then
 fi
 
 sample_prefix="${out_sample%%.*}"
-
 #########################################################
 # check at least one BAM/CRAM file is provided
 
 if [[ ${#cram_files[@]} -eq 0 && ${#bedgraph_files[@]} -eq 0 ]] ; then
-    echo "Error: No BAM/CRAM/BEDGRAPH files provided."
-    exit 1
+  echo "Error: No BAM/CRAM/BEDGRAPH files provided."
+  exit 1
+elif [[ ${#cram_files[@]} -gt 0 && ${#bedgraph_files[@]} -gt 0 ]] ; then
+  echo "Error: Either BAM/CRAM or BEDGRAPH must be files provided."
 fi
 
 #########################################################
@@ -127,16 +134,23 @@ done
 # set path
 
 script_path=$(dirname $(readlink -f $0))
-script_prefix="${0%%.*}"
+script_prefix="${0%.*}"
 
 #########################################################
 # compute covearge (per chr)
 
 rm -f $script_prefix.$sample_prefix.sh
 
+if [[ -s $out_sample && -s $out_sample.tbi ]] ; then
+  echo "File $out_sample already exists"
+  exit 0
+fi
+
+#########################################################
 # per chromosome
+
 sort -k2,2nr $ref_index | cut -f1 | while read -r chr; do
-  if ! [[ -s $tmp.$sample_prefix.$chr.sample.bedgraph.gz && -s $tmp.$sample_prefix.$chr.sample.bedgraph.gz.tbi ]] ; then
+  if ! [[ -s $tmp.$sample_prefix.$chr.bedgraph.gz && -s $tmp.$sample_prefix.$chr.bedgraph.gz.tbi ]] ; then
       if [ ${#cram_files[@]} -gt 0 ] ; then
         echo -n "samtools depth ${cram_files[*]} -r $chr         | $script_path/count_coverage.py  | $script_path/merge_coverage.py " >> $script_prefix.$sample_prefix.sh
       else
@@ -145,16 +159,15 @@ sort -k2,2nr $ref_index | cut -f1 | while read -r chr; do
       echo "| bgzip > $tmp.$sample_prefix.$chr.bedgraph.gz; tabix -p bed $tmp.$sample_prefix.$chr.bedgraph.gz" >> $script_prefix.$sample_prefix.sh
   fi
 done
-
 #########################################################
 # run in parallel; aggregate at the end
 
 if ! [ "$opt_dry_run" = "true" ]; then
   cat $script_prefix.$sample_prefix.sh | parallel -j $P
-  ls $tmp.$sample_prefix.*.sample.bedgraph.gz | sort -f | xargs cat > $out_sample   ; tabix -p bed $out_sample
+  ls $tmp.$sample_prefix.*.bedgraph.gz | sort -f | xargs cat > $out_sample   ; tabix -p bed $out_sample
   tabix -l $out_sample
-  rm $tmp.$sample_prefix.*.sample.bedgraph.gz $tmp.$sample_prefix.*.sample.bedgraph.gz.tbi
+  rm $tmp.$sample_prefix.*.bedgraph.gz $tmp.$sample_prefix.*.bedgraph.gz.tbi
 else
   cat $script_prefix.$sample_prefix.sh
-  echo "ls $tmp.$sample_prefix.*.sample.bedgraph.gz | sort -f | xargs cat > $out_sample   ; tabix -p bed $out_sample"
+  echo "ls $tmp.$sample_prefix.*.bedgraph.gz | sort -f | xargs cat > $out_sample   ; tabix -p bed $out_sample"
 fi
