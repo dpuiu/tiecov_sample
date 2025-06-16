@@ -1,4 +1,4 @@
-#!/usr/bin/env pypy
+#!/usr/bin/env pypy3
 
 """
 Aggregate BEDGRAPH intervals.

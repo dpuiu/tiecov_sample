@@ -1,4 +1,4 @@
-#!/usr/bin/env pypy
+#!/usr/bin/env pypy3
 
 """
 Script to merge consecutive genomic intervals with matching properties.
