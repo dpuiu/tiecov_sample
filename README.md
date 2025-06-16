@@ -43,12 +43,12 @@ Tissues.sample.bedgraph.gz.tbi – Tabix index files for fast querying
 ## Requirements
 
 The following tools must be installed and available in your system $PATH:  
-[samtools](https://github.com/samtools)
-[tabix](https://github.com/samtools/tabix)  
-[parallel](https://gnu.org)
-[bgzip](https://github.com/samtools/htslib)
-[readlink](https://www.gnu.org/software/coreutils/)
-[pypy3](https://pypy.org)
+* [samtools](https://github.com/samtools)  
+* [tabix](https://github.com/samtools/tabix)   
+* [parallel](https://gnu.org)  
+* [bgzip](https://github.com/samtools/htslib)  
+* [readlink](https://www.gnu.org/software/coreutils/)  
+* [pypy3](https://pypy.org)  
 
 To install most of these on a Debian-based system:
 
