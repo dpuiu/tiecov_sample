@@ -30,8 +30,8 @@ tiecov_sample.sh -ri ref.fa.fai -s Tissues.sample.bedgraph.gz -p 16 Tissue_*.sam
 
 ref.fa                 – Reference genome in FASTA format  
 ref.fa.fai             – Index of the reference FASTA (generated using samtools faidx)  
-Tissue_\*/\*.cram      – Input CRAM files
-Tissue_\*/\*.cram.crai – CRAM index files
+Tissue_\*/\*.cram      – Input CRAM files  
+Tissue_\*/\*.cram.crai – CRAM index files  
 
 ### Output Files
 
