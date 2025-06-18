@@ -9,7 +9,8 @@ Related project: [tiebrush](https://github.com/alevar/tiebrush)
 
 ## Overview
 
-`tiecov_sample` is a lightweight toolkit designed to compute per-sample coverage from multiple CRAM or BAM files. It outputs compressed and indexed BedGraph files suitable for further analysis or visualization.
+`tiecov_sample` is a lightweight toolkit designed to compute per-sample coverage from multiple CRAM or BAM files. 
+It outputs compressed and indexed BedGraph files suitable for further analysis or visualization.
 
 ---
 
@@ -24,6 +25,9 @@ tiecov_sample.sh -ri ref.fa.fai -s Tissue_2.sample.bedgraph.gz -p 16 Tissue_2/*.
 # Merge sample coverages across tissues
 tiecov_sample.sh -ri ref.fa.fai -s Tissues.sample.bedgraph.gz -p 16 Tissue_*.sample.bedgraph.gz
 
+# using a tiebrush input file
+samtools view -H Tissue.bam | grep SAMPLE: | sed 's|\@CO\tSAMPLE:||' | \
+  xargs tiecov_sample.sh -ri hg38_p12_ucsc.no_alts.no_fixs.fa.fai -s Tissue.sample.bedgraph.gz
 ```
 
 ### Input Files
