@@ -1,36 +1,34 @@
 #!/usr/bin/env pypy3
 
 """
-Aggregate BEDGRAPH intervals.
+Script that aggregates intervals from a bedGraph input format.
 
-This script reads intervals from a BEDGRAPH-like format from stdin,
-and outputs merged intervals with aggregated coverage.
+This script reads intervals from standard input in a BEDGRAPH-like format
+and outputs merged intervals with aggregated coverage values.
 
-It supports input lines with 3, 4, or 6 fields:
-- 3 fields: chrom, start, end (assumes +1 coverage)
+Supported input formats:
+- 3 fields: chrom, start, end
+    * Assumes a coverage value of 1 for each interval.
 - 4 fields: chrom, start, end, value
+    * Uses the provided coverage value.
 - 6 fields: chrom, start, end, name, value, strand
+    * Uses the provided coverage value and ignores other fields for aggregation.
 
-Optionally, a genome length file can be provided via `-g` to define end boundaries.
+Optionally, a genome length file can be specified with the `-g` flag.
+This file should define chromosome lengths to properly handle interval boundaries.
 
 Usage examples:
-    cat input.bedgraph |  sys.argv[1]
-    sys.argv[1] -g genome.len < input.bedgraph
-
+    cat input.bedGraph | sum_coverage.py
 """
 
 import sys
 import argparse
 
-def main():
-    parser = argparse.ArgumentParser(description="Aggregate BEDGRAPH intervals.")
-    parser.add_argument('-g', metavar='GENOME', help='Genome length file (tab-delimited: chrom<TAB>length)', required=False)
-    args = parser.parse_args()
-
+def sum_coverage(file):
     # Store changes in coverage per chrom and position
     coverage_map = {}
 
-    for line in sys.stdin:
+    for line in file:
         line = line.strip()
         if not line:
             continue
@@ -56,27 +54,6 @@ def main():
         cov[start] = cov.get(start, 0) + val
         cov[end] = cov.get(end, 0) - val
 
-    # Incorporate genome length file to ensure coverage ends at chromosome boundaries
-    if args.g:
-        try:
-            with open(args.g, 'r') as f:
-                for line in f:
-                    line = line.strip()
-                    if not line:
-                        continue
-                    parts = line.split('\t')
-                    if len(parts) < 2:
-                        raise ValueError(f"ERROR: Malformed genome line: {line}")
-                    chrom, length_str = parts[0], parts[1]
-                    length = int(length_str)
-                    coverage_map.setdefault(chrom, {})
-                    cov = coverage_map[chrom]
-                    cov.setdefault(0, 0)
-                    cov.setdefault(length, 0)
-        except IOError as e:
-            print(f"ERROR: Could not open genome file: {e}", file=sys.stderr)
-            sys.exit(1)
-
     # Clean zero-deltas (optional but reduces noise)
     for chrom in list(coverage_map):
         chrom_map = coverage_map[chrom]
@@ -96,4 +73,4 @@ def main():
             prev_pos = pos
 
 if __name__ == "__main__":
-    main()
+    sum_coverage(sys.stdin)
