@@ -25,7 +25,7 @@ print_help() {
     echo
     echo "Options:"
     echo "  -h, --help         Display this help and exit"
-    echo "  -r  <index>        Reference FASTA index (.fai) to define chromosomes or regions"
+    echo "  -r  <index>        Reference FASTA index (.fai) or list of chromosomes/regions"
     echo "  -p <threads>       Number of parallel threads (default: 12)"
     echo "  -s <sample>        Output sample file name (required)"
     echo "  --dry-run          Just print commands instead of executing"
@@ -33,8 +33,8 @@ print_help() {
     echo "input_files: sorted & indexed BAM/CRAM or bedGraph.gz files"
     echo
     echo "Example:"
-    echo "  $0                     -s output.bedGraph.gz input1.cram input2.cram ..."
-    echo "  $0 -r ref.fa.fai -p 12 -s output.bedGraph.gz input1.bam  input2.bam  ..."
+    echo "  $0                  -s output.bedGraph.gz input1.cram input2.cram ..."
+    echo "  $0 -r ref.ids -p 12 -s output.bedGraph.gz input1.bam  input2.bam  ..."
     echo
 }
 

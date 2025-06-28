@@ -18,12 +18,12 @@ It outputs compressed and indexed BedGraph files suitable for further analysis o
 
 ```bash
 # Compute per-sample coverage for Tissue_1,2 ...
-tiecov_sample.sh                -s Tissue_1.sample.bedgraph.gz Tissue_1/*.cram
-tiecov_sample.sh -r  ref.fa.fai -s Tissue_2.sample.bedgraph.gz Tissue_2/*.cram  # if all samples used the same referemce
+tiecov_sample.sh            -s Tissue_1.sample.bedgraph.gz Tissue_1/*.cram
+tiecov_sample.sh -r ref.ids -s Tissue_2.sample.bedgraph.gz Tissue_2/*.cram  # if all samples used the same referemce
 ...
 
 # Merge sample coverages across tissues
-tiecov_sample.sh -r  ref.fa.fai -s Tissues.sample.bedgraph.gz -p 16 Tissue_*.sample.bedgraph.gz
+tiecov_sample.sh -r  ref.ids -s Tissues.sample.bedgraph.gz -p 16 Tissue_*.sample.bedgraph.gz
 ```
 
 ### Input Files
