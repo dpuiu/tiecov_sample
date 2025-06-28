@@ -56,5 +56,5 @@ To install most of these on a Debian-based system:
 
 ```bash
 sudo apt update
-sudo apt install samtools tabix parallel coreutils pypy3 pyton3
+sudo apt install samtools tabix parallel coreutils pypy3 python3
 ```
