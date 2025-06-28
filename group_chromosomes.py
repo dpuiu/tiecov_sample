@@ -41,13 +41,13 @@ from collections import defaultdict
 def group_chromosomes(file):
     groups = defaultdict(list)
     for line in file:
-        parts = line.strip().split()
+        parts = line.strip().split('\t')
         if len(parts) < 2:
             continue
         key, val = parts[0], parts[1]
         groups[key].append(val)
-    for key in sorted(groups):
-        print(key + "\t" + " ".join(groups[key]))
+    for i, key in enumerate(sorted(groups), start=1):
+        print(f"{i}\t{key}\t{' '.join(groups[key])}")
 
 if __name__ == "__main__":
     group_chromosomes(sys.stdin)

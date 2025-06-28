@@ -175,7 +175,7 @@ fi
 cat $tmp.chr_files \
   | $PYTHON $script_path/group_chromosomes.py \
   | tee $tmp.chr_files_grouped \
-  | while read -r chr files; do
+  | while IFS=$'\t' read -r no chr files; do
 
     # Skip chromosome if already processed and indexed
     if [[ ! -s "$tmp.$chr.bedGraph.gz.tbi" ]] ; then
@@ -187,7 +187,7 @@ cat $tmp.chr_files \
         echo -n "$script_path/tabix.sh $files $chr | $PYTHON $script_path/sum_coverage.py " >> $tmp.sh
       fi
       # Compress output and index with tabix
-      echo "| bgzip > $tmp.$chr.bedGraph.gz ; tabix -p bed $tmp.$chr.bedGraph.gz" >> $tmp.sh
+      echo "| bgzip > $tmp.$no.bedGraph.gz ; tabix -p bed $tmp.$no.bedGraph.gz" >> $tmp.sh
     fi
 done
 

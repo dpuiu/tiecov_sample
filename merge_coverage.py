@@ -51,7 +51,7 @@ def merge_coverage(file):
     prev = []
 
     for lineno, line in enumerate(file, 1):
-        fields = line.strip().split()
+        fields = line.strip().split('\t')
         if len(fields) != 4:
             sys.stderr.write(f"Error on line {lineno}: expected 4 fields, got {len(fields)} → {line}")
             sys.exit(1)
