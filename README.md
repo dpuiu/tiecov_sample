@@ -33,7 +33,7 @@ tiecov_sample.sh -r ref.ids -o Tissues.sample.bedGraph.gz -p 16 Tissue_*.sample.
 
 ### Input Files
 
-Sample/Tissue files
+Sample/Tissue files:  
     *.bam       - Input bam alignemnt files  
     *.cram      - Input cram alignemnt files  
     *.gz        - Input bedGraph coverage files  
