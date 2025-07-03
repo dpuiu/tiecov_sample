@@ -47,7 +47,7 @@ ref.ids
 
 ### Output Files
 
-Tissues file
+Tissues file:  
     *.gz        - Compressed bedGraph file with total sample coverage  
 
 ---
