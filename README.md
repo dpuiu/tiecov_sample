@@ -34,9 +34,9 @@ tiecov_sample.sh -r ref.ids -o Tissues.sample.bedGraph.gz -p 16 Tissue_*.sample.
 ### Input Files
 
 Sample/Tissue files:  
-    *.bam       - Input bam alignemnt files  
-    *.cram      - Input cram alignemnt files  
-    *.gz        - Input bedGraph coverage files  
+    *.bam       - bam alignemnt files  
+    *.cram      - cram alignemnt files  
+    *.gz        - bedGraph coverage files  
 
 ref.ids  
     A list of reference regions (e.g., from samtools faidx).    
