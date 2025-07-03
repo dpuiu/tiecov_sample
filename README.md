@@ -34,9 +34,11 @@ tiecov_sample.sh -r ref.ids -o Tissues.sample.bedGraph.gz -p 16 Tissue_*.sample.
 ### Input Files
 
 Sample/Tissue files:  
+<pre>
     *.bam       - BAM  alignemnt files  
     *.cram      - CRAM alignemnt files  
     *.gz        - bedGraph coverage files  
+</pre>
 
 ref.ids  
     A file containing a list of reference regions (e.g., from samtools faidx).    
@@ -52,12 +54,12 @@ Tissues file:
 
 Example:  
 <pre>
-    $ zcat Tissues.sample.bedGraph.gz  
-    chr1	9999	10003	1	# chr1:9999-10003 region covered by a single sample(multiple reads?)  
-    chr1	10003	10004	3	# chr1:9993-10004 region covered by 3 samples  
-    chr1	10004	10010	5	# ...  
-    chr1	10010	10011	7  
-    chr1	10011	10013	8  
+$ zcat Tissues.sample.bedGraph.gz  
+  chr1	9999	10003	1	# chr1:9999-10003 region covered by a single sample(multiple reads?)  
+  chr1	10003	10004	3	# chr1:9993-10004 region covered by 3 samples  
+  chr1	10004	10010	5	# ...  
+  chr1	10010	10011	7  
+  chr1	10011	10013	8  
 </pre>
 ---
 
