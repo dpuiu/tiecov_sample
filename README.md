@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Compute **sample coverage** from multiple input **bam**, **cram**, or **bedGraph** files.
+Compute **sample coverage** from multiple input **BAM**, **CRAM**, or **bedGraph** files.
 
 **Repository:** [tiecov_sample](https://github.com/dpuiu/tiecov_sample/)  
 Related project: [tiebrush](https://github.com/alevar/tiebrush)
@@ -13,7 +13,7 @@ Related project: [tiebrush](https://github.com/alevar/tiebrush)
 
 ## Overview
 
-`tiecov_sample` is a lightweight toolkit designed to compute per-sample coverage from multiple cram/bam/bedGraph files. 
+`tiecov_sample` is a lightweight toolkit designed to compute per-sample coverage from multiple CRAM/BAM/bedGraph files. 
 It outputs compressed and indexed bedGraph files suitable for further analysis or visualization.
 
 ---
@@ -34,8 +34,8 @@ tiecov_sample.sh -r ref.ids -o Tissues.sample.bedGraph.gz -p 16 Tissue_*.sample.
 ### Input Files
 
 Sample/Tissue files:  
-    *.bam       - bam alignemnt files  
-    *.cram      - cram alignemnt files  
+    *.bam       - BAM  alignemnt files  
+    *.cram      - CRAM alignemnt files  
     *.gz        - bedGraph coverage files  
 
 ref.ids  
@@ -68,3 +68,9 @@ To install most of these on a Debian-based system:
 sudo apt update
 sudo apt install samtools tabix parallel coreutils pypy3 python3
 ```
+
+## Links
+
+* [https://samtools.github.io/hts-specs/SAMv1.pdf Sequence Alignment/Map Format Specification]
+* [https://samtools.github.io/hts-specs/CRAMv3.pdf CRAM format specification]
+* [https://genome.ucsc.edu/goldenpath/help/bedgraph.html bedGraph format]
