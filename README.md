@@ -21,11 +21,11 @@ It outputs compressed and indexed bedGraph files suitable for further analysis o
 ## Example Usage
 
 ```bash
-# Compute per-sample coverage for Tissue_1 ...
+# Compute per-sample coverage for Tissue_1 
 tiecov_sample.sh            -o Tissue_1.sample.bedGraph.gz Tissue_1/*.cram
 
-# Use a common reference for Tissue_2
-tiecov_sample.sh -r ref.ids -o Tissue_2.sample.bedgGaph.gz Tissue_2/*.cram  # if all samples used the same referemce
+# Use a common reference for Tissue_2 (if all samples used the same reference)
+tiecov_sample.sh -r ref.ids -o Tissue_2.sample.bedgGaph.gz Tissue_2/*.cram 
 
 # Merge sample coverage across multiple tissues
 tiecov_sample.sh -r ref.ids -o Tissues.sample.bedGraph.gz -p 16 Tissue_*.sample.bedGraph.gz
@@ -33,22 +33,22 @@ tiecov_sample.sh -r ref.ids -o Tissues.sample.bedGraph.gz -p 16 Tissue_*.sample.
 
 ### Input Files
 
-ref.ids  
-A list of reference regions (e.g., from samtools faidx).  
-Use this file if all input CRAMs were aligned to the same reference.  
-Each line can be:  
-  A chromosome (chr1)  
-  A chromosome region (chr1:100000-200000)  
-
 Sample/Tissue files
-  *.bam       - Input bam files
-  *.cram      - Input cram files  
-  *.gz        - Input bedGraph files
+    *.bam       - Input bam alignemnt files  
+    *.cram      - Input cram alignemnt files  
+    *.gz        - Input bedGraph coverage files  
+
+ref.ids  
+    A list of reference regions (e.g., from samtools faidx).    
+    Use this file if all input CRAMs were aligned to the same reference.    
+    Each line can be:  
+       A chromosome (chr1)  
+       A chromosome region (chr1:100000-200000)  
 
 ### Output Files
 
 Tissues file
-  *.gz        - Compressed bedGraph files with total sample coverage  
+    *.gz        - Compressed bedGraph file with total sample coverage  
 
 ---
 
