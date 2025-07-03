@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 # Script that computes per-sample coverage from BAM/CRAM or bedGraph files.
 # It automatically extracts chromosome lists, processes coverage by chromosome,
@@ -12,9 +12,10 @@ tmp="tmp"                        # Prefix for temporary files
 cram_files=()                    # Array to store BAM/CRAM input files
 bedGraph_files=()                # Array to store bedGraph input files
 is_crams=false                   # Flag to indicate whether CRAM/BAM mode is active
-P=12                             # Default number of parallel threads
+P=16                             # Default number of parallel threads
 PYTHON=$(command -v pypy3 || command -v python3) # If pypy3 is installed, use it; otherwise, default to python3
 
+ulimit -n 65536
 ########################################
 # Define help message
 
@@ -26,15 +27,16 @@ print_help() {
     echo "Options:"
     echo "  -h, --help         Display this help and exit"
     echo "  -r  <index>        Reference FASTA index (.fai) or list of chromosomes/regions"
-    echo "  -p <threads>       Number of parallel threads (default: 12)"
-    echo "  -s <sample>        Output sample file name (required)"
+    echo "  -p <threads>       Number of parallel threads (default: 16)"
+    echo "  -o <sample>        Output sample file name (required)"
     echo "  --dry-run          Just print commands instead of executing"
     echo
-    echo "input_files: sorted & indexed BAM/CRAM or bedGraph.gz files"
+    echo "input_files: sorted & indexed bam/cram/bedGraph.gz files"
     echo
     echo "Example:"
-    echo "  $0                  -s output.bedGraph.gz input1.cram input2.cram ..."
-    echo "  $0 -r ref.ids -p 12 -s output.bedGraph.gz input1.bam  input2.bam  ..."
+    echo "  $0            -o output.gz input1.cram input2.cram ..."
+    echo "  $0 -r ref.ids -o output.gz input1.bam  input2.bam  ..."
+    echo "  $0 -r ref.ids -o output.gz input1.gz   input2.gz  ..."
     echo
 }
 
@@ -69,7 +71,7 @@ while [[ $# -gt 0 ]]; do
             opt_dry_run=true
             shift
             ;;
-        -s)
+        -o)
             out_sample="$2"
             shift 2
             ;;
@@ -82,7 +84,7 @@ while [[ $# -gt 0 ]]; do
             case "$1" in
                 *.cram)         cram_files+=("$1") ;;
                 *.bam)          cram_files+=("$1") ;;
-                *.bedGraph.gz)  bedGraph_files+=("$1") ;;
+                *.gz)           bedGraph_files+=("$1") ;;
                 *)              echo "Missing input files or unknown extension" ; exit 1 ;;
             esac
 
@@ -106,10 +108,10 @@ if [[ -n "$ref_index" ]] && [[ ! -r "$ref_index" ]] ; then
 fi
 
 ########################################
-# Check that -s (sample output filename) is specified
+# Check that -o (sample output filename) is specified
 
 if [[ ! -n "$out_sample" ]] ; then
-  echo "Error: option -s must be defined; use -h for details"
+  echo "Error: option -o must be defined; use -h for details"
   exit 1
 fi
 
@@ -171,11 +173,11 @@ fi
 
 ########################################
 # Prepare coverage computation commands for each chromosome
-
+rm -f $tmp.sh
 cat $tmp.chr_files \
   | $PYTHON $script_path/group_chromosomes.py \
   | tee $tmp.chr_files_grouped \
-  | while IFS=$'\t' read -r no chr files; do
+  | while IFS=$'\t' read -r chr files; do
 
     # Skip chromosome if already processed and indexed
     if [[ ! -s "$tmp.$chr.bedGraph.gz.tbi" ]] ; then
@@ -187,7 +189,7 @@ cat $tmp.chr_files \
         echo -n "$script_path/tabix.sh $files $chr | $PYTHON $script_path/sum_coverage.py " >> $tmp.sh
       fi
       # Compress output and index with tabix
-      echo "| bgzip > $tmp.$no.bedGraph.gz ; tabix -p bed $tmp.$no.bedGraph.gz" >> $tmp.sh
+      echo "| bgzip > $tmp.$chr.bedGraph.gz ; tabix -p bed $tmp.$chr.bedGraph.gz" >> $tmp.sh
     fi
 done
 
@@ -199,16 +201,21 @@ if [[ ! "$opt_dry_run" == "true" ]] ; then
   echo "Running $0 in parallel ... "
   cat $tmp.sh | parallel -j $P 2>/dev/null
 
+  #check all files were generated
+  cat $tmp.sh | awk '{print $NF}' |                   xargs ls > /dev/null
+  cat $tmp.sh | awk '{print $NF}' | sed 's|$|.tbi|' | xargs ls > /dev/null
+
   # Concatenate all per-chromosome bedGraph files into final output
   ls $tmp.*.bedGraph.gz | sort -f | xargs cat > $out_sample
   tabix -p bed $out_sample
 
   # Clean up temporary files
   rm $tmp.*
-  
+
   echo "Done"
 else
   # Print commands for inspection, but do not execute
   cat $tmp.sh
   echo "ls $tmp.*.bedGraph.gz | sort -f | xargs cat > $out_sample ; tabix -p bed $out_sample"
+  rm $tmp.sh
 fi

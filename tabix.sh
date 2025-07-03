@@ -13,7 +13,7 @@ fi
 
 # Get the last argument as the chromosome name.
 # "${!#}" expands to the value of the last positional argument.
-chromosome="${!#}"
+chr="${!#}"
 
 # Collect all arguments except the last one into an array called 'files'.
 # "${@:1:$#-1}" expands from argument 1 up to argument $#-1
@@ -25,5 +25,5 @@ for file in "${files[@]}"; do
   test -s "$file"
 
   # Query the tabix-indexed file for the specified chromosome
-  tabix "$file" "$chromosome"
+  tabix "$file" "$chr"
 done

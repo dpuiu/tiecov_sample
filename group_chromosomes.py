@@ -46,8 +46,8 @@ def group_chromosomes(file):
             continue
         key, val = parts[0], parts[1]
         groups[key].append(val)
-    for i, key in enumerate(sorted(groups), start=1):
-        print(f"{i}\t{key}\t{' '.join(groups[key])}")
+    for key in sorted(groups):
+        print(f"{key}\t{' '.join(groups[key])}")
 
 if __name__ == "__main__":
     group_chromosomes(sys.stdin)

@@ -1,6 +1,10 @@
 # tiecov_sample.sh
 
-Script to compute **sample coverage** from multiple input **BAM/CRAM/BEDGRAPH** files.
+---
+
+## Purpose
+
+Compute **sample coverage** from multiple input **bam**, **cram**, or **bedGraph** files.
 
 **Repository:** [tiecov_sample](https://github.com/dpuiu/tiecov_sample/)  
 Related project: [tiebrush](https://github.com/alevar/tiebrush)
@@ -9,36 +13,42 @@ Related project: [tiebrush](https://github.com/alevar/tiebrush)
 
 ## Overview
 
-`tiecov_sample` is a lightweight toolkit designed to compute per-sample coverage from multiple CRAM/BAM/BEDGRAPH files. 
-It outputs compressed and indexed BedGraph files suitable for further analysis or visualization.
+`tiecov_sample` is a lightweight toolkit designed to compute per-sample coverage from multiple cram/bam/bedGraph files. 
+It outputs compressed and indexed bedGraph files suitable for further analysis or visualization.
 
 ---
 
 ## Example Usage
 
 ```bash
-# Compute per-sample coverage for Tissue_1,2 ...
-tiecov_sample.sh            -s Tissue_1.sample.bedgraph.gz Tissue_1/*.cram
-tiecov_sample.sh -r ref.ids -s Tissue_2.sample.bedgraph.gz Tissue_2/*.cram  # if all samples used the same referemce
-...
+# Compute per-sample coverage for Tissue_1 ...
+tiecov_sample.sh            -o Tissue_1.sample.bedGraph.gz Tissue_1/*.cram
 
-# Merge sample coverages across tissues
-tiecov_sample.sh -r  ref.ids -s Tissues.sample.bedgraph.gz -p 16 Tissue_*.sample.bedgraph.gz
+# Use a common reference for Tissue_2
+tiecov_sample.sh -r ref.ids -o Tissue_2.sample.bedgGaph.gz Tissue_2/*.cram  # if all samples used the same referemce
+
+# Merge sample coverage across multiple tissues
+tiecov_sample.sh -r ref.ids -o Tissues.sample.bedGraph.gz -p 16 Tissue_*.sample.bedGraph.gz
 ```
 
 ### Input Files
 
-ref.fa.fai             – Index of the reference FASTA (generated using samtools faidx)  
-                         to be used only if all the samples used the same alignment reference  
-                         can contain a cromosome subset
+ref.ids  
+A list of reference regions (e.g., from samtools faidx).  
+Use this file if all input CRAMs were aligned to the same reference.  
+Each line can be:  
+  A chromosome (chr1)  
+  A chromosome region (chr1:100000-200000)  
 
-Tissue_\*/\*.cram      – Input CRAM files  
-Tissue_\*/\*.cram.crai – CRAM index files  
+Sample/Tissue files
+  *.bam       - Input bam files
+  *.cram      - Input cram files  
+  *.gz        - Input bedGraph files
 
 ### Output Files
 
-Tissues.sample.bedgraph.gz     – Compressed BedGraph files with total sample coverage  
-Tissues.sample.bedgraph.gz.tbi – Tabix index files for fast querying  
+Tissues file
+  *.gz        - Compressed bedGraph files with total sample coverage  
 
 ---
 
