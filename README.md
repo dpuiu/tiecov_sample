@@ -50,14 +50,13 @@ ref.ids
 Tissues file:  
     *.gz        - Compressed bedGraph file with total sample coverage  
 
-Example
-    $ zcat Tissues.sample.bedGraph.gz
-    chr1	9999	10003	1	# chr1:9999-10003 region covered by a single sample(multiple reads?)
-    chr1	10003	10004	3	# chr1:9993-10004 region covered by 3 samples
-    chr1	10004	10010	5	# ...
-    chr1	10010	10011	7
-    chr1	10011	10013	8
-
+Example:  
+    $ zcat Tissues.sample.bedGraph.gz  
+    chr1	9999	10003	1	# chr1:9999-10003 region covered by a single sample(multiple reads?)  
+    chr1	10003	10004	3	# chr1:9993-10004 region covered by 3 samples  
+    chr1	10004	10010	5	# ...  
+    chr1	10010	10011	7  
+    chr1	10011	10013	8  
 
 ---
 
