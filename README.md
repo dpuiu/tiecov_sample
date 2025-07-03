@@ -39,8 +39,8 @@ Sample/Tissue files:
     *.gz        - bedGraph coverage files  
 
 ref.ids  
-    A list of reference regions (e.g., from samtools faidx).    
-    Use this file if all input CRAMs were aligned to the same reference.    
+    A file containing a list of reference regions (e.g., from samtools faidx).    
+    Use this file if all input files were aligned to the same reference.    
     Each line can be:  
        A chromosome (chr1)  
        A chromosome region (chr1:100000-200000)  
