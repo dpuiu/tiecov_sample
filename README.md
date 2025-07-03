@@ -71,6 +71,6 @@ sudo apt install samtools tabix parallel coreutils pypy3 python3
 
 ## Links
 
-* [https://samtools.github.io/hts-specs/SAMv1.pdf Sequence Alignment/Map Format Specification]
-* [https://samtools.github.io/hts-specs/CRAMv3.pdf CRAM format specification]
-* [https://genome.ucsc.edu/goldenpath/help/bedgraph.html bedGraph format]
+* [Sequence Alignment/Map Format Specification] (https://samtools.github.io/hts-specs/SAMv1.pdf)
+* [CRAM format specification] (https://samtools.github.io/hts-specs/CRAMv3.pdf CRAM format specification)
+* [bedGraph format] (https://genome.ucsc.edu/goldenpath/help/bedgraph.html bedGraph format)
