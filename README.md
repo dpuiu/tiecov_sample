@@ -35,9 +35,9 @@ tiecov_sample.sh -r ref.ids -o Tissues.sample.bedGraph.gz -p 16 Tissue_*.sample.
 
 Sample/Tissue files:  
 <pre>
-    *.bam       - BAM  alignemnt files  
-    *.cram      - CRAM alignemnt files  
-    *.gz        - bedGraph coverage files  
+ *.bam       - BAM  alignemnt files  
+ *.cram      - CRAM alignemnt files  
+ *.gz        - bedGraph coverage files  
 </pre>
 
 ref.ids  
